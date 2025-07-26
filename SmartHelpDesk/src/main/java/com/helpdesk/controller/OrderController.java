@@ -38,4 +38,10 @@ public class OrderController {
         Order refundedOrder = orderService.issueRefund(id);
         return (refundedOrder != null) ? ResponseEntity.ok(refundedOrder) : ResponseEntity.notFound().build();
     }
+    
+    @PostMapping("/{id}/cancel")
+    public ResponseEntity<Order> cancelOrder(@PathVariable String id) {
+        Order cancelledOrder = orderService.cancelOrder(id);
+        return (cancelledOrder != null) ? ResponseEntity.ok(cancelledOrder) : ResponseEntity.notFound().build();
+    }
 }

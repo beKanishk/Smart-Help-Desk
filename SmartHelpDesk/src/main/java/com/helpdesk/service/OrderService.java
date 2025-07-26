@@ -47,4 +47,19 @@ public class OrderService {
 	public Order createOrder(Order order) {
 		return orderRepository.save(order);
 	}
+	
+	public Order cancelOrder(String id) {
+		Optional<Order> opt = orderRepository.findById(id);
+		
+		if(opt.isPresent()) {
+			Order order = opt.get();
+			if(!"Cancelled".equals(order.getStatus())) {
+				order.setStatus("Cancelled");
+				return orderRepository.save(order);
+			}
+			return new Order("Order is already cancelled", 0);
+		}
+		
+		return new Order("Order not found", 0);
+	}
 }

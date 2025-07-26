@@ -5,3 +5,5 @@ agno
 google-generativeai
 google-genai
 httpx
+chromadb
+pypdf
