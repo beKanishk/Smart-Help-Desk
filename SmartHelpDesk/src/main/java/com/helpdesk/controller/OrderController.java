@@ -18,30 +18,30 @@ public class OrderController {
     }
 
     @GetMapping
-    public List<Order> getAllOrders() {
-        return orderService.getAllOrders();
+    public List<Order> getUserOrders(@RequestHeader("Authorization") String jwt) {
+        return orderService.getUserOrders(jwt);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Order> getOrder(@PathVariable String id) {
-        Order order = orderService.getOrderById(id);
+    public ResponseEntity<Order> getOrderById(@PathVariable String id, @RequestHeader("Authorization") String jwt) {
+        Order order = orderService.getOrderById(id, jwt);
         return (order != null) ? ResponseEntity.ok(order) : ResponseEntity.notFound().build();
     }
 
     @PostMapping
     public Order createOrder(@RequestBody Order order, @RequestHeader("Authorization") String jwt) {
-        return orderService.createOrder(order);
+        return orderService.createOrder(order, jwt);
     }
 
     @PostMapping("/{id}/refund")
-    public ResponseEntity<Order> refundOrder(@PathVariable String id) {
-        Order refundedOrder = orderService.issueRefund(id);
+    public ResponseEntity<Order> refundOrder(@PathVariable String id, @RequestHeader("Authorization") String jwt) {
+        Order refundedOrder = orderService.issueRefund(id, jwt);
         return (refundedOrder != null) ? ResponseEntity.ok(refundedOrder) : ResponseEntity.notFound().build();
     }
     
     @PostMapping("/{id}/cancel")
-    public ResponseEntity<Order> cancelOrder(@PathVariable String id) {
-        Order cancelledOrder = orderService.cancelOrder(id);
+    public ResponseEntity<Order> cancelOrder(@RequestHeader("Authorization") String jwt, @PathVariable String id) {
+        Order cancelledOrder = orderService.cancelOrder(id, jwt);
         return (cancelledOrder != null) ? ResponseEntity.ok(cancelledOrder) : ResponseEntity.notFound().build();
     }
 }

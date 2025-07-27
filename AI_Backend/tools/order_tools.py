@@ -1,12 +1,29 @@
 import httpx
 from agno.tools import tool
+from auth_state import jwt_state
 
 SPRING_BOOT_BASE_URL = "http://localhost:8080/api/orders"
+
+def get_headers():
+    jwt = jwt_state.get("jwt")
+    if not jwt:
+        raise Exception("JWT token not set")
+
+    # If jwt is a dict, extract the Authorization key
+    if isinstance(jwt, dict):
+        jwt = jwt.get("Authorization", "")
+
+    if not jwt.startswith("Bearer "):
+        jwt = f"Bearer {jwt}"
+
+    return {"Authorization": jwt}
+
+
 
 @tool
 async def check_order(order_id: str) -> str:
     """Check the status of an order by its ID."""
-    async with httpx.AsyncClient() as client:
+    async with httpx.AsyncClient(headers=get_headers()) as client:
         resp = await client.get(f"{SPRING_BOOT_BASE_URL}/{order_id}")
         if resp.status_code == 200:
             return f"Order details: {resp.json()}"
@@ -15,7 +32,7 @@ async def check_order(order_id: str) -> str:
 @tool
 async def issue_refund(order_id: str) -> str:
     """Issue a refund for an order."""
-    async with httpx.AsyncClient() as client:
+    async with httpx.AsyncClient(headers=get_headers()) as client:
         resp = await client.post(f"{SPRING_BOOT_BASE_URL}/{order_id}/refund")
         if resp.status_code == 200:
             return f"Refund processed: {resp.json()}"
@@ -24,8 +41,17 @@ async def issue_refund(order_id: str) -> str:
 @tool
 async def cancel_order(order_id: str) -> str:
     """Cancel an order by its ID."""
-    async with httpx.AsyncClient() as client:
+    async with httpx.AsyncClient(headers=get_headers()) as client:
         resp = await client.post(f"{SPRING_BOOT_BASE_URL}/{order_id}/cancel")
         if resp.status_code == 200:
             return f"Order canceled: {resp.json()}"
         return f"Failed to cancel order {order_id}. Response: {resp.text}"
+    
+@tool
+async def all_orders():
+    """Get all orders of a User"""
+    async with httpx.AsyncClient(headers=get_headers()) as client:
+        resp = await client.get(f"{SPRING_BOOT_BASE_URL}")
+        if resp.status_code == 200:
+            return f"Orders {resp.json()}"
+        return f"Failed to get orders. Response: {resp.text}"

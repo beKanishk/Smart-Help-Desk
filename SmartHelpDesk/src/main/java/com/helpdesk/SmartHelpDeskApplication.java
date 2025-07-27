@@ -19,8 +19,8 @@ public class SmartHelpDeskApplication {
 	CommandLineRunner initData(OrderRepository repository) {
 	    return args -> {
 	        if (repository.count() == 0) { // Only insert if no orders exist
-	            repository.save(new Order("Shipped", 99.99));
-	            repository.save(new Order("Delivered", 149.99));
+	            repository.save(new Order("Shipped", 99.99, "6885cfe085624c2312aaee4e"));
+	            repository.save(new Order("Delivered", 149.99, "6885cfe085624c2312aaee4e"));
 	        }
 	    };
 	}

@@ -1,8 +1,10 @@
 package com.helpdesk.controller;
 
+import com.helpdesk.dto.Response;
 import com.helpdesk.model.User;
 import com.helpdesk.service.UserService;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -46,8 +48,20 @@ public class UserController {
 	public Optional<User> getUserByEmail(@PathVariable String email) {
 		return userService.getUserByEmail(email);
 	}
-
+	
 	@GetMapping
+	public ResponseEntity<Response> getUserByJwt(@RequestHeader("Authorization") String jwt) {
+	    User user = userService.findUserByJwt(jwt);
+	    if (user == null) {
+	        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+	    }
+	    Response response = new Response(user.getId(), user.getEmail(), user.getName(), user.getRole());
+	    
+	    return new ResponseEntity<>(response, HttpStatus.OK);
+	}
+
+
+	@GetMapping("/all")
 	public List<User> getAllUsers() {
 		return userService.getAllUsers();
 	}
