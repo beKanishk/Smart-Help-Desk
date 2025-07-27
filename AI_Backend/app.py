@@ -9,6 +9,6 @@ class Query(BaseModel):
     query: str
 
 @app.post("/agent/respond")
-async def respond(query: Query):
-    result : RunResponse = await support_team.arun(query.query)
+def respond(query: Query):
+    result : RunResponse = support_team.run(query.query)
     return {"response": result.content}

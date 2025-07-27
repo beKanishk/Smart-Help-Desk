@@ -10,10 +10,12 @@ public class Order {
     private String id;
     private String status;
     private double amount;
+    private String user_Id;
 
-    public Order(String status, double amount) {
+    public Order(String status, double amount, String user_Id) {
         this.status = status;
         this.amount = amount;
+        this.user_Id = user_Id;
     }
 
 	public String getId() {
@@ -38,6 +40,14 @@ public class Order {
 
 	public void setAmount(double amount) {
 		this.amount = amount;
+	}
+
+	public String getUser_Id() {
+		return user_Id;
+	}
+
+	public void setUser_Id(String user_Id) {
+		this.user_Id = user_Id;
 	}
 
 }

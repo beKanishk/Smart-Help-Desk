@@ -29,7 +29,7 @@ public class OrderController {
     }
 
     @PostMapping
-    public Order createOrder(@RequestBody Order order) {
+    public Order createOrder(@RequestBody Order order, @RequestHeader("Authorization") String jwt) {
         return orderService.createOrder(order);
     }
 
