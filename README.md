@@ -53,6 +53,8 @@ Smart-Help-Desk/
 │   ├── app.py                  # FastAPI app with support agent
 │   ├── agents/
 │   │   └── support_team.py     # Gemini agent definition
+│   │   └── knowledge_agent.py
+│   │   └── status_agent.py
 │   ├── tools/
 │   │   ├── order_tools.py      # cancel_order, issue_refund, etc.
 │   │   └── user_tools.py       # get_user, get_last_order, etc.
@@ -63,10 +65,10 @@ Smart-Help-Desk/
 
 ## Example Request:
 
-POST /agent/respond
-{
-  "query": "I want to cancel my order",
-  "session_id": "1234-abcd"
-}
-# Header:
-Authorization: Bearer <JWT_TOKEN>
+POST /agent/respond  
+{  
+  "query": "I want to cancel my order",  
+  "session_id": "1234-abcd"  
+}  
+# Header:  
+Authorization: Bearer <JWT_TOKEN>  
