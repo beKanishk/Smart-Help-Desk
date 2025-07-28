@@ -110,6 +110,7 @@ from agno.knowledge.pdf import PDFKnowledgeBase
 from agno.embedder.google import GeminiEmbedder
 from config import GOOGLE_API_KEY
 import os
+from MongoMemoryDb import memory
 
 # 1. Ensure Google API Key set
 if not GOOGLE_API_KEY:
@@ -150,8 +151,14 @@ knowledge_agent = Agent(
     instructions=[
         "You are a helpful assistant that answers questions from the company policy.",
         "Use context from the provided knowledge base to answer accurately.",
-        "If insufficient information exists, inform the user politely."
+        "If insufficient information exists, inform the user politely.",
+        "Also save session_id in memory for future reference."
     ],
     markdown=True,
     show_tool_calls=True,
+    memory=memory,
+    enable_user_memories=True,
+    enable_session_summaries=True,
+    add_history_to_messages=True,
+    num_history_runs=5,
 )

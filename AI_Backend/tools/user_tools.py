@@ -18,11 +18,14 @@ def get_headers():
 
     return {"Authorization": jwt}
 
-@tool
-async def get_user() :
-    """Get the User details"""
+async def get_user_data():
     async with httpx.AsyncClient(headers=get_headers()) as client:
         resp = await client.get(f"{SPRING_BOOT_BASE_URL}")
         if resp.status_code == 200:
             return resp.json()
         return {"error": f"Failed to get user. Response: {resp.text}"}
+
+@tool
+async def get_user():
+    """Get the User details"""
+    return await get_user_data()
