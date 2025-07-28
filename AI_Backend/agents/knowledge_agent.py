@@ -110,7 +110,8 @@ from agno.knowledge.pdf import PDFKnowledgeBase
 from agno.embedder.google import GeminiEmbedder
 from config import GOOGLE_API_KEY
 import os
-from MongoMemoryDb import memory
+from Memory.MongoMemoryDb import memory
+from tools.user_tools import get_user
 
 # 1. Ensure Google API Key set
 if not GOOGLE_API_KEY:
@@ -142,23 +143,44 @@ knowledge_base = PDFKnowledgeBase(
 knowledge_base.load(recreate=False)
 
 # 4. Configure Knowledge Agent with vector retrieval support
+# This is the agent with MongoDB memory
+# knowledge_agent = Agent(
+#     name="Knowledge Agent",
+#     role="Answers questions based on company policy PDF.",
+#     model=Gemini(id="gemini-2.0-flash", api_key=GOOGLE_API_KEY),
+#     knowledge=knowledge_base,
+#     search_knowledge=True,
+#     instructions=[
+#         "You are a helpful assistant that answers questions from the company policy.",
+#         "Use context from the provided knowledge base to answer accurately.",
+#         "If insufficient information exists, inform the user politely.",
+#         "Also save session_id in memory for future reference."
+#     ],
+#     markdown=True,
+#     show_tool_calls=True,
+#     memory=memory,
+#     enable_user_memories=True,
+#     enable_session_summaries=True,
+#     add_history_to_messages=True,
+#     num_history_runs=5,
+# )
+
+
+# This is the agent without MongoDB memory agno have in built-in memory if we pass session_id and user_id
 knowledge_agent = Agent(
     name="Knowledge Agent",
     role="Answers questions based on company policy PDF.",
     model=Gemini(id="gemini-2.0-flash", api_key=GOOGLE_API_KEY),
+    tools=[get_user],
     knowledge=knowledge_base,
     search_knowledge=True,
     instructions=[
         "You are a helpful assistant that answers questions from the company policy.",
         "Use context from the provided knowledge base to answer accurately.",
         "If insufficient information exists, inform the user politely.",
-        "Also save session_id in memory for future reference."
+        "Also save session_id in memory for future reference.",
+        "First get the user details using the get_user tool."
     ],
     markdown=True,
     show_tool_calls=True,
-    memory=memory,
-    enable_user_memories=True,
-    enable_session_summaries=True,
-    add_history_to_messages=True,
-    num_history_runs=5,
 )
