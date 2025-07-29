@@ -46,7 +46,7 @@ This project uses **session memory only** (no long-term memory):
 
 ```bash
 Smart-Help-Desk/
-├── backend-springboot/
+├── SmartHelpDesk/
 │   ├── src/main/java/...       # Spring Boot user/order/auth services
 │   └── application.properties  # MongoDB, JWT config
 ├── ai_backend/
